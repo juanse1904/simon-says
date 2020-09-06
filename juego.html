@@ -102,27 +102,35 @@
         const btnEmpezar = document.getElementById('btnEmpezar')
         const ULTIMO_NIVEL = 10
   
-        class Juego {
-          constructor() {
+        class Juego {//esta clase va a tener toda la logica del juego
+          constructor() { //this para el caso se refiere a la partida
             this.inicializar()
             this.generarSecuencia()
             this.siguienteNivel()
           }
   
           inicializar() {
-            btnEmpezar.classList.add('hide')
+            btnEmpezar.classList.add('hide')//oculta el boton de inicio
             this.nivel=1
             this.colores={
                 celeste,
                 violeta,
                 naranja,
                 verde
-
+              //para el caso JavaScript toma el valor de los elementos del objeto igual que el titulo
+              // celeste: celeste es igual a solo poner celeste
 
             }
           }
           generarSecuencia(){
               this.secuencia= new Array(ULTIMO_NIVEL).fill(0).map(n => Math.floor(Math.random()*4))
+              //se crea un array de secuencias, primer argumento, tamaño de array
+              //se llama fill para definir todos los elementos del array en 0
+              //map le realiza algo a cada uno de los elementos del array
+              //math.floor redondea hacia abajo al numero (3.2=>3 , 2.8=>2)
+              //math.random genera un aletatorio entre 0 y 1
+              //se multiplica por 4 para que genere un valor mayor a 1 pero menor a 4
+              //todo eso con el fin de generar un numero aleatorio entre 0 y 3
           }
           siguienteNivel(){
               this.subnivel= 0
@@ -131,7 +139,7 @@
               this.agregarEventosclick()
 
           }
-            transformarNumero(numero){
+            transformarNumero(numero){ /* se le da como argumento un numero para que devuelva un color */
                 switch(numero){
                     case 0:
                     return 'celeste'
@@ -145,7 +153,7 @@
                 }
             }
 
-            transformarColor(nombreColor){
+            transformarColor(nombreColor){ /* se le da un color para que devuelva un numero */
                 switch(nombreColor){
                     case 'celeste':
                     return 0
@@ -159,10 +167,15 @@
                 }
             }
 
-          iluminarSecuencia(){
+          iluminarSecuencia(){ /* va a iluminar los botones dependiendo del nivel que se neucentre 
+          por lo que se usa un for que hace ciclos dependiendo del nivel en el que este, si esta en
+          el nivel 2 hara dos ciclos, si esta en el 10 hara 10 ciclos */
               for(var i=0;i< this.nivel;i=i+1){
-                const color = this.transformarNumero(this.secuencia[i])
-                setTimeout(()=> this.iluminarColor(color),1000*i)
+                const color = this.transformarNumero(this.secuencia[i]) /* se le pasa a la función
+                de transformar numero cada uno de los elementos del array de secuencia segun sea el nivel
+                para ello el indice de ese array es el mismo i del for */
+                setTimeout(()=> this.iluminarColor(color),1000*i) /* se usa un settimeout para que no
+                ilumine los colores al mismo tiempo */
               }
            }
           iluminarColor(color){
@@ -224,8 +237,8 @@
         }
 
   
-        function empezarJuego() {
-          var juego = new Juego()
+        function empezarJuego() { //función que se ejecuta al clickear el botón
+          var juego = new Juego()// se crea un elemento por medio de una clase (nueva partida)
         }
 
        
