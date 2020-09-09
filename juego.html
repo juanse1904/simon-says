@@ -78,6 +78,7 @@
           position: absolute;
           top: calc(50% - 50px);
           left: calc(50% - 200px);
+          transition: 500ms;
         }
   
         .hide {
@@ -106,7 +107,9 @@
           constructor() { //this para el caso se refiere a la partida
             this.inicializar()
             this.generarSecuencia()
+          setTimeout(()=>{
             this.siguienteNivel()
+          },500)
           }
   
           inicializar() {
@@ -133,6 +136,8 @@
               //todo eso con el fin de generar un numero aleatorio entre 0 y 3
           }
           siguienteNivel(){
+             this.elegirColor=this.elegirColor.bind(this)
+             this.siguienteNivel=this.siguienteNivel.bind(this)
               this.subnivel= 0
               this.nombreatributo = 'valor'
               this.iluminarSecuencia()
@@ -170,7 +175,7 @@
           iluminarSecuencia(){ /* va a iluminar los botones dependiendo del nivel que se neucentre 
           por lo que se usa un for que hace ciclos dependiendo del nivel en el que este, si esta en
           el nivel 2 hara dos ciclos, si esta en el 10 hara 10 ciclos */
-              for(var i=0;i< this.nivel;i=i+1){
+              for(let i=0;i< this.nivel;i=i+1){
                 const color = this.transformarNumero(this.secuencia[i]) /* se le pasa a la función
                 de transformar numero cada uno de los elementos del array de secuencia segun sea el nivel
                 para ello el indice de ese array es el mismo i del for */
@@ -179,44 +184,53 @@
               }
            }
           iluminarColor(color){
-              this.colores[color].classList.add('light')
-              setTimeout(()=> this.apagarColor(color),380)
+              this.colores[color].classList.add('light') /* toma el elemento que corresponde al color 
+              ej:violeta y toma  su lista de clases, para agregarle la clase de lista*/
+              setTimeout(()=> this.apagarColor(color),380) /* ejecuta la funcion que apaga el color
+              y se le dice en que tiempo lo hago, asi va a dar la sensacion de encendido y apagado */
 
           }
           apagarColor(color){
-            this.colores[color].classList.remove('light')
+            this.colores[color].classList.remove('light')/* toma el elemento color del html y su lista
+            de clases para eliminar la clase light es decir, apaga el boton */
           }
           agregarEventosclick(){
-              this.colores.celeste.addEventListener('click',this.elegirColor.bind(this)) /* bind ata le clase Juego a la propiedad this */
-              this.colores.violeta.addEventListener('click',this.elegirColor.bind(this))
-              this.colores.naranja.addEventListener('click',this.elegirColor.bind(this))
-              this.colores.verde.addEventListener('click',this.elegirColor.bind(this))
+              this.colores.celeste.addEventListener('click',this.elegirColor) /* bind ata le clase Juego a la propiedad this */
+              this.colores.violeta.addEventListener('click',this.elegirColor)
+              this.colores.naranja.addEventListener('click',this.elegirColor)
+              this.colores.verde.addEventListener('click',this.elegirColor)
             }
             eliminarEvenetosClick(){
-                this.colores.celeste.removeEventListener('click',this.elegirColor.bind(this)) /* bind ata le clase Juego a la propiedad this */
-              this.colores.violeta.removeEventListener('click',this.elegirColor.bind(this))
-              this.colores.naranja.removeEventListener('click',this.elegirColor.bind(this))
-              this.colores.verde.removeEventListener('click',this.elegirColor.bind(this))
+              this.colores.celeste.removeEventListener('click',this.elegirColor) /* bind ata le clase Juego a la propiedad this */
+              this.colores.violeta.removeEventListener('click',this.elegirColor)
+              this.colores.naranja.removeEventListener('click',this.elegirColor)
+              this.colores.verde.removeEventListener('click',this.elegirColor)
 
             }
           elegirColor(ev){
               const nombreColor = ev.target.dataset.color
-              const numerocolor= this.transformarColor(nombreColor)
+              
+              const numeroColor= this.transformarColor(nombreColor)
               this.iluminarColor(nombreColor)
-              if (numerocolor===this.secuencia[this.subnivel]){
-                this.subnivel+=1
+              if (numeroColor===this.secuencia[this.subnivel]){
+               this.subnivel+=1
                 if(this.subnivel===this.nivel){
                     this.nivel+=1
                     this.eliminarEvenetosClick()
                     if(this.nivel===(ULTIMO_NIVEL+1)){
                        this.ganojuego()
                     } else {
-                        setTimeout(this.siguienteNivel.bind(this) , 2000)
+                        setTimeout(this.siguienteNivel, 1500)
                     }
 
                 }
               }else{
-                  this.perdiojuego()
+                console.log(this.secuencia)
+                console.log(this.subnivel)
+                console.log(numeroColor)
+                
+                this.perdiojuego()
+
               }
             }
         
