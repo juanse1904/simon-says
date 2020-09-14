@@ -130,7 +130,7 @@
           margin-top: 70px;
         }
       </style>
-      <audio id="sound" src=""></audio>
+     
     </head>
     <body>
       <div class="information">
@@ -212,6 +212,19 @@
 
                 }
             }
+            generarFre(num){ /* se le da como argumento un numero para que devuelva frecuencia de sonido */
+                switch(num){
+                    case 0:
+                    return 140.31
+                    case 1:
+                    return 231.6
+                    case 2:
+                    return 325.8
+                    case 3:
+                    return 438.2
+
+                }
+            }
 
             transformarColor(nombreColor){ /* se le da un color para que devuelva un numero */
                 switch(nombreColor){
@@ -236,24 +249,32 @@
                 para ello el indice de ese array es el mismo i del for */
                 setTimeout(()=> {
                   this.iluminarColor(color)
-                  this.generarSonido(color)
+                  this.generarSonido(this.secuencia[i])
                 },1000*i) /* se usa un settimeout para que no
                 ilumine los colores al mismo tiempo */
               }
            }
-           generarSonido(color){
-             let pista= "./assets/"+color+".mp3";
-             let audio=document.getElementById("sound");
-             audio.src=pista;
-             audio.play();
+           generarSonido(num){
+             let frec= this.generarFre(num)
+             
+            var context = new (window.AudioContext || window.webkitAudioContext)()
+            var o = context.createOscillator()
+            var  g = context.createGain()
+            o.type="triangle"
+            o.frequency.value=frec
+            o.connect(g)
+            g.connect(context.destination)
+            o.start()
+            g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 0.4)
            }
+
           iluminarColor(color){
               this.colores[color].classList.add('light') /* toma el elemento que corresponde al color 
               ej:violeta y toma  su lista de clases, para agregarle la clase de lista*/
               setTimeout(()=> this.apagarColor(color),380) /* ejecuta la funcion que apaga el color
               y se le dice en que tiempo lo hago, asi va a dar la sensacion de encendido y apagado */
-
           }
+
           oprimirColor(color){
             this.colores[color].classList.add('pushed','smaller') /* toma el elemento que corresponde al color 
               ej:violeta y toma  su lista de clases, para agregarle la clase de lista*/
@@ -286,7 +307,7 @@
               const nombreColor = ev.target.dataset.color
               const numeroColor= this.transformarColor(nombreColor)
               this.oprimirColor(nombreColor)
-              this.generarSonido(nombreColor)
+              this.generarSonido(numeroColor)
               if (numeroColor===this.secuencia[this.subnivel]){ /* si el numero del color que clickeó
               el usuario coincide con el numero que esta en el array de la secuencia generada entonces
               puede continuar */
