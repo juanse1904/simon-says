@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Ranchers&display=swap" rel="stylesheet">
     <title>Simón Dice</title>
     <style>
         body {
           margin: 0;
           background: #dedede;
-          display: flex;
+          
           align-items: center;
           height: 100vh;
         }
@@ -38,7 +39,7 @@
   
         .celeste {
           background: #22a6b3;
-          transition: 500ms;
+          transition: 700ms;
           border-top-left-radius: 100%;
           box-shadow: inset 7px 7px 7px rgba(255,255,255,.7), inset -2px -2px 3px rgba(0,0,0,.1), 2px 2px 10px rgba(0,0,0,.1);
 
@@ -115,9 +116,29 @@
         .smaller{
           transform:scale(0.85);
         }
+        h1{
+          font-family: 'Ranchers', cursive;
+          font-size: 3.5em;
+          text-align: center;
+          
+        }
+        h2{
+          font-size: 3.5em;
+          text-align: center; 
+        }
+        .information{
+          margin-top: 70px;
+        }
       </style>
+      <audio id="sound" src=""></audio>
     </head>
     <body>
+      <div class="information">
+
+        <h1>Simon Says</h1>
+        <h2>Nivel:</h2>
+        <h2 id="nivel">0</h2>
+      </div> 
       <div class="gameboard">
         <div id="celeste" class="color celeste left" data-color="celeste"></div>
         <div id="violeta" class="color violeta right" data-color="violeta"></div>
@@ -131,6 +152,7 @@
         const violeta = document.getElementById('violeta')
         const naranja = document.getElementById('naranja')
         const verde = document.getElementById('verde')
+        const level = document.getElementById('nivel')
         const btnEmpezar = document.getElementById('btnEmpezar')
         const ULTIMO_NIVEL = 10
   
@@ -145,6 +167,7 @@
   
           inicializar() {
             btnEmpezar.classList.add('hide')//oculta el boton de inicio
+            level.innerHTML="1"
             this.nivel=1
             this.colores={
                 celeste,
@@ -211,9 +234,18 @@
                 const color = this.transformarNumero(this.secuencia[i]) /* se le pasa a la función
                 de transformar numero cada uno de los elementos del array de secuencia segun sea el nivel
                 para ello el indice de ese array es el mismo i del for */
-                setTimeout(()=> this.iluminarColor(color),1000*i) /* se usa un settimeout para que no
+                setTimeout(()=> {
+                  this.iluminarColor(color)
+                  this.generarSonido(color)
+                },1000*i) /* se usa un settimeout para que no
                 ilumine los colores al mismo tiempo */
               }
+           }
+           generarSonido(color){
+             let pista= "./assets/"+color+".mp3";
+             let audio=document.getElementById("sound");
+             audio.src=pista;
+             audio.play();
            }
           iluminarColor(color){
               this.colores[color].classList.add('light') /* toma el elemento que corresponde al color 
@@ -254,9 +286,11 @@
               const nombreColor = ev.target.dataset.color
               const numeroColor= this.transformarColor(nombreColor)
               this.oprimirColor(nombreColor)
+              this.generarSonido(nombreColor)
               if (numeroColor===this.secuencia[this.subnivel]){ /* si el numero del color que clickeó
               el usuario coincide con el numero que esta en el array de la secuencia generada entonces
               puede continuar */
+               level.innerHTML=" "+this.nivel
                this.subnivel+=1 /* sigue el siguiente color de secuencia */
                 if(this.subnivel===this.nivel){ /* si el subnivel es igual al nivel entonces se está
                 en el tope del nivel, es decir si esto se cumple y el nivel es 3 es porque el usuario clikeo
