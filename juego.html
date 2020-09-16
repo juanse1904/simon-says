@@ -99,15 +99,16 @@
         }
   
         .btn-start {
-          width: 400px;
-          height: 100px;
+          width: 40%;
+          height: 70px;
+          border-radius: 30px;
           background: #ecf0f1;
           color: #2c3e50;
-          font-size: 2.5rem;
-          position: absolute;
-          top: calc(50% - 50px);
-          left: calc(50% - 200px);
+          font-size: 1.8em;
+          display:block;
           transition: 500ms;
+          margin-left: auto;
+          margin-right:auto;
         }
   
         .hide {
@@ -129,8 +130,13 @@
         .information{
           margin-top: 70px;
         }
+        @media only screen and (max-width: 600px) {
+          .btn-start {
+          width: 80%;
+         }
+} 
       </style>
-     
+     <audio id="sound" src=""></audio>
     </head>
     <body>
       <div class="information">
@@ -139,12 +145,12 @@
         <h2>Nivel:</h2>
         <h2 id="nivel">0</h2>
       </div> 
+      <button id="btnEmpezar" class="btn-start" onclick="empezarJuego()">Empezar a jugar!</button>
       <div class="gameboard">
         <div id="celeste" class="color celeste left" data-color="celeste"></div>
         <div id="violeta" class="color violeta right" data-color="violeta"></div>
         <div id="naranja" class="color naranja left" data-color="naranja"></div>
         <div id="verde" class="color verde right" data-color="verde"></div>
-        <button id="btnEmpezar" class="btn-start" onclick="empezarJuego()">Empezar a jugar!</button>
       </div>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
       <script>
@@ -249,13 +255,17 @@
                 para ello el indice de ese array es el mismo i del for */
                 setTimeout(()=> {
                   this.iluminarColor(color)
-                  this.generarSonido(this.secuencia[i])
+                  this.generarSonido(color)
                 },1000*i) /* se usa un settimeout para que no
                 ilumine los colores al mismo tiempo */
               }
            }
-           generarSonido(num){
-             let frec= this.generarFre(num)
+           generarSonido(color){
+
+             let sound= document.getElementById("sound")
+             sound.src="./assets/"+color+".mp3"
+             sound.play()
+             /* let frec= this.generarFre(num)
              
             var context = new (window.AudioContext || window.webkitAudioContext)()
             var o = context.createOscillator()
@@ -265,7 +275,7 @@
             o.connect(g)
             g.connect(context.destination)
             o.start()
-            g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 0.4)
+            g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 0.4) */
            }
 
           iluminarColor(color){
@@ -276,7 +286,7 @@
           }
 
           oprimirColor(color){
-            this.colores[color].classList.add('pushed','smaller') /* toma el elemento que corresponde al color 
+            this.colores[color].classList.add('pushed') /* toma el elemento que corresponde al color 
               ej:violeta y toma  su lista de clases, para agregarle la clase de lista*/
               setTimeout(()=> this.soltarColor(color),380) /* ejecuta la funcion que apaga el color
               y se le dice en que tiempo lo hago, asi va a dar la sensacion de encendido y apagado */
@@ -287,7 +297,7 @@
             de clases para eliminar la clase light es decir, apaga el boton */
           }
           soltarColor(color){
-            this.colores[color].classList.remove('pushed','smaller')/* toma el elemento color del html y su lista
+            this.colores[color].classList.remove('pushed')/* toma el elemento color del html y su lista
             de clases para eliminar la clase light es decir, apaga el boton */
           }
           agregarEventosclick(){
@@ -307,7 +317,7 @@
               const nombreColor = ev.target.dataset.color
               const numeroColor= this.transformarColor(nombreColor)
               this.oprimirColor(nombreColor)
-              this.generarSonido(numeroColor)
+              this.generarSonido(nombreColor)
               if (numeroColor===this.secuencia[this.subnivel]){ /* si el numero del color que clickeó
               el usuario coincide con el numero que esta en el array de la secuencia generada entonces
               puede continuar */
