@@ -130,6 +130,24 @@
         .information{
           margin-top: 70px;
         }
+        .footer{
+          display:grid;
+          grid-template-columns: 1fr 1fr;
+          background-color: #194988;
+          font-size: 2.0em;
+          max-height: 300px;
+          margin-top: 30px;
+        }
+        .logo{
+          height:70%;
+          margin:20px;
+          justify-self:end;
+          filter:invert(1);
+        }
+        #dev{
+          margin-left: 20px;
+          color: white;
+        }
         @media only screen and (max-width: 600px) {
           .btn-start {
           width: 80%;
@@ -152,6 +170,10 @@
         <div id="naranja" class="color naranja left" data-color="naranja"></div>
         <div id="verde" class="color verde right" data-color="verde"></div>
       </div>
+      <footer class="footer">
+        <p id="dev">developer By:</p>
+        <img class="logo" src="./assets/logo.png" alt="">
+      </footer>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
       <script>
         const celeste = document.getElementById('celeste')
